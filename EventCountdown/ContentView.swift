@@ -1,24 +1,16 @@
-//
-//  ContentView.swift
-//  EventCountdown
-//
-//  Created by Singh, Pankaj on 08/11/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State var events: [Event] = []
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        EventsView(events: $events)
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(events: [
+        Event(title: "First Event", date: Date(), color: .brown),
+        Event(title: "Second Event is Largest", date: Date(), color: .red),
+        Event(title: "Third Event", date: Date(), color: .blue)
+    ])
 }
