@@ -21,7 +21,9 @@ struct EventsView: View {
             }
             .navigationDestination(for: Event.self) { event in
                 if let index = events.firstIndex(where: { $0.id == event.id }) {
-                    EventForm(events: $events, action: .update(index: index))
+                    EventForm(events: $events, action: .update(index: index), onSave: { event in
+                        events[index] = event
+                    })
                 }
 
             }
@@ -29,7 +31,9 @@ struct EventsView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                        EventForm(events: $events, action: .add)
+                        EventForm(events: $events, action: .add, onSave: { event in
+                            events.append(event)
+                        })
                     } label: { Image(systemName: "plus").font(.title3) }
                 }
             }

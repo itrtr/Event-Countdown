@@ -21,6 +21,7 @@ struct EventForm: View {
     @State private var color: Color = .black
     @Binding var events: [Event]
     var action: EventAction
+    var onSave: (Event) -> Void
     
     var body: some View {
         Form {
@@ -42,7 +43,12 @@ struct EventForm: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    handleOnSave()
+                    if !title.isEmpty {
+                        onSave(Event(title: title, date: date, color: color))
+                        dismiss()
+                    } else {
+                        errorMessage = "Title is empty!"
+                    }
                 } label: {
                     Image(systemName: "checkmark")
                         .font(.title3)
@@ -68,28 +74,4 @@ struct EventForm: View {
     private func validIndex(_ index: Int, _ events: [Event]) -> Bool {
         index >= 0 && index < events.count
     }
-    
-    private func handleOnSave() {
-        if title.isEmpty {
-            errorMessage = "Title is empty!"
-        } else {
-            switch action {
-            case .add:
-                events.append(Event(title: title, date: date, color: color))
-            case .update(let index):
-                events[index] = Event(title: title, date: date, color: color)
-            }
-            dismiss()
-        }
-    }
-}
-
-#Preview {
-    EventForm(
-        events: .constant([
-        Event(title: "First Event", date: Date(), color: .brown),
-        Event(title: "Second Event is the longest", date: Date(), color: .brown),
-        Event(title: "Third Event", date: Date(), color: .brown)]),
-        action: EventAction.add
-    )
 }
