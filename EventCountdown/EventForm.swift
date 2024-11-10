@@ -9,7 +9,8 @@ struct EventFormErrorView: View {
                 .foregroundStyle(.red)
                 .font(.caption)
                 .bold()
-            Spacer() }
+            Spacer()
+        }
     }
 }
 
@@ -38,7 +39,7 @@ struct EventForm: View {
                 .padding(.vertical, 2)
                 .onAppear { if case .update(let index) = action { color = events[index].color } }
         }
-        .navigationTitle(getHeaderTitle(action, events))
+        .navigationTitle(getHeaderTitle())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -59,15 +60,18 @@ struct EventForm: View {
     
     // Generate header title based on whether we're on add or update mode. If on update mode, shrink the title
     // to some reasonable value
-    private func getHeaderTitle(_ action: EventAction, _ events: [Event]) -> String {
+    private func getHeaderTitle() -> String {
         var headerTitle = "Add Event"
-        if case .update(let index) = action {
-            headerTitle = "Edit " + events[index].title
-            if headerTitle.count >= 18 {
-                headerTitle = headerTitle.prefix(18) + "..."
+        switch self.action {
+        case .add:
+            return headerTitle
+        case .update(_):
+            headerTitle = "Edit " + title
+            if headerTitle.count >= 20 {
+                headerTitle = headerTitle.prefix(20) + "..."
             }
+            return headerTitle
         }
-        return headerTitle
     }
     
     // validates the index
