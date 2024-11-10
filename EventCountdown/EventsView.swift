@@ -37,6 +37,15 @@ struct EventsView: View {
                     } label: { Image(systemName: "plus").font(.title3) }
                 }
             }
+            .overlay {
+                if events.isEmpty {
+                    ContentUnavailableView {
+                        Label("No event exists", systemImage: "heart.text.clipboard")
+                    } description: {
+                        Text("Add a new event see here")
+                    }
+                }
+            }
         }
     }
 }
